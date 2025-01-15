@@ -1,10 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Website, WebsiteTheme } from '../types/website';
 import WebsitePreview from './WebsitePreview';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function WebsiteGenerator() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const editIndex = searchParams.get('edit');
+
   const [website, setWebsite] = useState<Website>({
     theme: 'classic',
     heroSection: {
@@ -13,10 +18,32 @@ export default function WebsiteGenerator() {
     },
   });
 
+  const [isEditing, setIsEditing] = useState(false);
+
+  useEffect(() => {
+    if (editIndex !== null) {
+      const savedWebsites = JSON.parse(localStorage.getItem('websites') || '[]');
+      const websiteToEdit = savedWebsites[Number(editIndex)];
+      if (websiteToEdit) {
+        setWebsite(websiteToEdit);
+        setIsEditing(true);
+      }
+    }
+  }, [editIndex]);
+
   const handleSave = () => {
     const savedWebsites = JSON.parse(localStorage.getItem('websites') || '[]');
-    savedWebsites.push(website);
+    
+    if (isEditing && editIndex !== null) {
+      // Update existing website
+      savedWebsites[Number(editIndex)] = website;
+    } else {
+      // Add new website
+      savedWebsites.push(website);
+    }
+    
     localStorage.setItem('websites', JSON.stringify(savedWebsites));
+    router.push('/websites');
   };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,9 +64,13 @@ export default function WebsiteGenerator() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-8">
-      <h1 className="text-3xl font-bold mb-8">Website Generator</h1>
-      
+    <main className="flex min-h-screen flex-col items-center px-8">
+      <div className="w-full max-w-6xl flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">
+          {isEditing ? 'Edit Website' : 'Create New Website'}
+        </h1>
+      </div>
+
       <div className="flex gap-8 w-full max-w-6xl">
         <div className="w-1/2 space-y-6">
           <div className="space-y-4">
@@ -47,11 +78,17 @@ export default function WebsiteGenerator() {
             <select
               value={website.theme}
               onChange={(e) => setWebsite(prev => ({ ...prev, theme: e.target.value as WebsiteTheme }))}
-              className="w-full p-2 border rounded-md"
+              className="w-full p-2 border rounded-md text-black"
             >
               <option value="classic">Classic</option>
               <option value="mournful">Mournful</option>
               <option value="positive">Positive</option>
+              <option value="modern">Modern</option>
+              <option value="natural">Natural</option>
+              <option value="pastel">Pastel</option>
+              <option value="vanGogh">Van Gogh</option>
+              <option value="roman">Roman</option>
+              <option value="australian">Australian</option>
             </select>
           </div>
 
