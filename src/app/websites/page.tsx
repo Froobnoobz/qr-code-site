@@ -71,7 +71,7 @@ export default function WebsitesList() {
               </div>
 
               {/* Action Buttons */}
-              <div className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="absolute top-2 right-2">
                 <div className="flex gap-2 bg-white p-2 rounded-lg shadow">
                   <Link
                     href={`/websites/${index}`}

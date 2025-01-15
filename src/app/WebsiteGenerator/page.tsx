@@ -64,15 +64,15 @@ export default function WebsiteGenerator() {
   };
 
   return (
-    <main className="flex min-h-screen flex-col items-center px-8">
+    <main className="flex min-h-screen flex-col items-center px-4 sm:px-8">
       <div className="w-full max-w-6xl flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold">
           {isEditing ? 'Edit Website' : 'Create New Website'}
         </h1>
       </div>
 
-      <div className="flex gap-8 w-full max-w-6xl">
-        <div className="w-1/2 space-y-6">
+      <div className="flex flex-col lg:flex-row gap-8 w-full max-w-6xl">
+        <div className="w-full lg:w-1/2 space-y-6">
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Theme</h2>
             <select
@@ -193,13 +193,13 @@ export default function WebsiteGenerator() {
 
           <button
             onClick={handleSave}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 sticky bottom-4 lg:relative lg:bottom-0"
           >
             Save Website
           </button>
         </div>
 
-        <div className="w-1/2">
+        <div className="w-full lg:w-1/2 sticky top-8">
           <WebsitePreview website={website} />
         </div>
       </div>
