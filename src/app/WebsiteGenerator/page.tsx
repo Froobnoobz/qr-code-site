@@ -1,11 +1,11 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { Website, WebsiteTheme } from '../types/website';
 import WebsitePreview from './WebsitePreview';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function WebsiteGenerator() {
+function WebsiteGeneratorContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const editIndex = searchParams.get('edit');
@@ -204,5 +204,13 @@ export default function WebsiteGenerator() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function WebsiteGenerator() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <WebsiteGeneratorContent />
+    </Suspense>
   );
 } 
